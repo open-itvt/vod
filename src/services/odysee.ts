@@ -1,6 +1,6 @@
 import type { VodItem } from '../stores/streamStore'
 
-const API_URL = '/api/v1/proxy'
+const API_URL = 'https://api.lbry.tv/api/v1/proxy'
 const CHANNEL = '@itvt:9'
 const CACHE_KEY = 'ivod_vod_cache'
 const CACHE_TTL = 12 * 60 * 60 * 1000
