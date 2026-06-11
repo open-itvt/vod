@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vod.itvt.xyz/sitemap.xml
+
+LLMs: https://vod.itvt.xyz/llms.txt
