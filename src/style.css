@@ -1,0 +1,48 @@
+:root {
+  --primary-dark: #0F0F11;
+  --secondary-dark: #161416;
+  --highlight-red: #A81414;
+  --pure-white: #FFFFFF;
+  --light-grey: #BCBCC4;
+  --disabled-grey: #555555;
+
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --h1-size: 32px;
+  --h2-size: 28px;
+  --h3-size: 22px;
+  --channel-title-size: 18px;
+  --program-desc-size: 14px;
+  --meta-size: 12px;
+
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 32px;
+  --radius: 8px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--primary-dark);
+  color: var(--pure-white);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --h1-size: 24px;
+    --h2-size: 20px;
+    --space-lg: 16px;
+  }
+}

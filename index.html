@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <!-- SEO -->
+    <title>iVOD - iTVT Vod | Platforma streamingowa</title>
+    <meta name="description" content="iVOD - platforma streamingowa iTVT Group. Oglądaj kanały TV na żywo oraz nagrania VOD w jednym miejscu." />
+    <meta name="keywords" content="iVOD, iTVT, streaming, VOD, telewizja, polskie kanały" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://vod.itvt.xyz" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="iVOD - iTVT Vod | Platforma streamingowa" />
+    <meta property="og:description" content="Oglądaj kanały TV na żywo oraz nagrania VOD z iTVT Group." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://vod.itvt.xyz" />
+    <meta property="og:image" content="https://vod.itvt.xyz/og-image.png" />
+    <meta property="og:site_name" content="iVOD" />
+    <meta property="og:locale" content="pl_PL" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="iVOD - iTVT Vod | Platforma streamingowa" />
+    <meta name="twitter:description" content="Oglądaj kanały TV na żywo oraz nagrania VOD z iTVT Group." />
+    <meta name="twitter:image" content="https://vod.itvt.xyz/og-image.png" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "iVOD",
+      "url": "https://vod.itvt.xyz",
+      "description": "Platforma streamingowa iTVT Group - oglądaj kanały TV na żywo oraz nagrania VOD.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://vod.itvt.xyz/search?q={query}",
+        "query-input": "required name=query"
+      }
+    }
+    </script>
+    <style>
+      html, body { background: #0F0F11; }
+      .loader-wrap {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        z-index: 9999;
+      }
+      .loader-text {
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 36px;
+        font-weight: 700;
+        color: #BCBCC4;
+        letter-spacing: 3px;
+      }
+      .loader {
+        width: 150px;
+        height: 30px;
+        background:
+          linear-gradient(#15bf7a 50%,#0000 0),
+          linear-gradient(#0000 50%,#15bf7a 0),
+          linear-gradient(#15bf7a 50%,#0000 0),
+          linear-gradient(#0000 50%,#15bf7a 0),
+          linear-gradient(#15bf7a 50%,#0000 0),
+          linear-gradient(#0000 50%,#15bf7a 0)
+          #ddd;
+        background-size: calc(100%/6 + 1px) 200%;
+        background-repeat: no-repeat;
+        border-radius: 6px;
+        animation: l12 1.5s infinite;
+        z-index: 9999;
+      }
+      @keyframes l12 {
+        0%     { background-position: calc(0*100%/5) 100%,calc(1*100%/5)   0%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
+        16.67% { background-position: calc(0*100%/5)   0%,calc(1*100%/5)   0%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
+        33.33% { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
+        50%    { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
+        66.67% { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
+        83.33% { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5)   0%,calc(5*100%/5)   0% }
+        100%   { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5)   0%,calc(5*100%/5) 100% }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="loader-wrap" id="app-loader">
+      <div class="loader-text">iVOD</div>
+      <div class="loader"></div>
+    </div>
+    <div id="app" style="display:none"></div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+          const el = document.getElementById("app-loader")
+          if (el) el.remove()
+          document.getElementById("app").removeAttribute("style")
+        }, 200)
+      })
+    </script>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
