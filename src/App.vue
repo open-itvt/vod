@@ -6,6 +6,7 @@ import AppHeader from './components/layout/AppHeader.vue'
 import AppFooter from './components/layout/AppFooter.vue'
 import FirstLoadPopup from './components/FirstLoadPopup.vue'
 import WelcomePopup from './components/WelcomePopup.vue'
+import DeepLinkPrompt from './components/DeepLinkPrompt.vue'
 import router from './router'
 
 const route = useRoute()
@@ -36,6 +37,7 @@ function showFooter() {
   <div class="route-loader" :class="{ active: routeLoading }" />
   <AppHeader />
   <RouterView />
+  <DeepLinkPrompt v-if="showFooter()" />
   <AppFooter v-if="showFooter()" />
 </template>
 
