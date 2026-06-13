@@ -59,7 +59,7 @@ const faqItems = [
   { q: 'Jak oglądać kanał TV?', a: 'Wybierz kanał z listy "Kanały TV" lub kliknij kartę w karuzeli, a następnie kliknij "Watch live".' },
   { q: 'Gdzie znajdę nagrania VOD?', a: 'Nagrania VOD znajdziesz w sekcji "Kategorie". Kliknij wybraną kategorię, a następnie wybierz interesujące Cię nagranie.' },
   { q: 'Jak wyszukiwać treści?', a: 'Użyj paska wyszukiwania u góry strony — wpisz frazę, a wyniki pojawią się automatycznie.' },
-  { q: 'Czy mogę oglądać na telefonie?', a: 'Tak! Pobierz aplikację iTVT z: <a href="https://files.itvt.xyz/download/android/" target="_blank" class="inline-link">files.itvt.xyz/download/android/</a>' },
+  { q: 'Czy mogę oglądać na telefonie?', a: 'Tak! Pobierz aplikację iTVT z: <a href="https://vod.itvt.xyz/apps" target="_blank" class="inline-link">vod.itvt.xyz/apps/</a>' },
   { q: 'Gdzie zgłosić problem?', a: 'Skontaktuj się z nami przez e-mail: <a href="mailto:kontakt@itvt.xyz" class="inline-link">kontakt@itvt.xyz</a>' },
 ]
 </script>
