@@ -4,7 +4,9 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-const isDesktopApp = ref(false)
+const protocolAvailable = ref(false)
+const checking = ref(true)
+
 const path = computed(() => {
   const name = route.name
   if (name === 'vod') return `/vod/${route.params.programName}/${route.params.part}`
@@ -15,15 +17,54 @@ const path = computed(() => {
   return '/vod'
 })
 
+function detectProtocol() {
+  const timer = setTimeout(() => {
+    cleanup()
+    checking.value = false
+    protocolAvailable.value = false
+  }, 800)
+
+  function onVisibility() {
+    if (document.hidden) {
+      clearTimeout(timer)
+      cleanup()
+      checking.value = false
+      protocolAvailable.value = true
+    }
+  }
+
+  function onBlur() {
+    clearTimeout(timer)
+    cleanup()
+    checking.value = false
+    protocolAvailable.value = true
+  }
+
+  function cleanup() {
+    document.removeEventListener('visibilitychange', onVisibility)
+    window.removeEventListener('blur', onBlur)
+  }
+
+  document.addEventListener('visibilitychange', onVisibility)
+  window.addEventListener('blur', onBlur)
+
+  const iframe = document.createElement('iframe')
+  iframe.style.display = 'none'
+  iframe.src = 'itvt://'
+  document.body.appendChild(iframe)
+  setTimeout(() => iframe.remove(), 100)
+}
+
 onMounted(() => {
   if (navigator.userAgent.indexOf('iTVT Desktop App') !== -1) {
-    isDesktopApp.value = true
+    checking.value = false
+    return
   }
+  detectProtocol()
 })
 
 function openApp() {
-  const url = 'itvt://open?path=' + encodeURIComponent(path.value)
-  window.location.href = url
+  window.location.href = 'itvt://open?path=' + encodeURIComponent(path.value)
   setTimeout(() => {
     if (!document.hidden) {
       window.location.href = 'https://desktop-app.itvt.xyz/apps?path=' + encodeURIComponent(path.value)
@@ -33,10 +74,10 @@ function openApp() {
 </script>
 
 <template>
-  <div v-if="!isDesktopApp" class="deeplink-bar">
+  <div v-if="!checking && protocolAvailable" class="deeplink-bar">
     <span class="deeplink-text">
       Otwórz w aplikacji iTVT
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
     </span>
     <button class="deeplink-btn" @click="openApp">Otwórz</button>
   </div>
