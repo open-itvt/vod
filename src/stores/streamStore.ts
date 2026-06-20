@@ -62,7 +62,6 @@ export const useStreamStore = defineStore('stream', () => {
   const channels = ref<Channel[]>([
     { id: 1, title: 'iTVT', name: 'itvt', programName: 'Klubuntu Stream - Tworzymy razem', timeRange: '18:00', progress: 15, type: 'tv' },
     { id: 2, title: 'Oliwier Stream', name: 'o-stream', programName: 'Wieczorny Stream', timeRange: '21:00', progress: 70, type: 'tv' },
-    { id: 3, title: 'iTVT Now', name: 'itvt-now', programName: 'Reklamy', timeRange: '22:00', progress: 30, type: 'tv' },
   ])
 
   const vodItems = ref<VodItem[]>([])
