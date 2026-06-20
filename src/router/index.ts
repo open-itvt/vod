@@ -17,6 +17,7 @@ const router = createRouter({
     { path: '/category/:slug', name: 'category', component: CategoryView },
     { path: '/apps', name: 'apps', component: AppsView },
     { path: '/apps/other', name: 'apps-other', component: AppsOtherView },
+    { path: '/regulamin', redirect: '/?regulamin=1' },
   ],
   scrollBehavior(to) {
     if (to.hash) {

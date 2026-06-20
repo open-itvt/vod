@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const loaded = ref(false)
+
+const HUB_URL = 'https://hub.itvt.xyz/static/android'
+
+onMounted(() => {
+  window.location.href = HUB_URL
+})
 
 function goBack() {
   router.push('/apps')
@@ -18,18 +23,7 @@ function goBack() {
       </svg>
       Powrót do aplikacji
     </button>
-    <div class="embed-wrap">
-      <div v-if="!loaded" class="embed-loader" />
-      <iframe
-        src="https://hub.itvt.xyz/static/android"
-        class="embed-iframe"
-        :class="{ loaded }"
-        allowfullscreen
-        sandbox="allow-scripts allow-same-origin allow-forms"
-        referrerpolicy="no-referrer"
-        @load="loaded = true"
-      />
-    </div>
+    <p class="redirect-info">Przekierowywanie do <a :href="HUB_URL" target="_blank">{{ HUB_URL }}</a>...</p>
   </main>
 </template>
 
@@ -38,11 +32,16 @@ function goBack() {
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: var(--space-md);
   gap: var(--space-md);
 }
 
 .back-btn {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-md);
   display: inline-flex;
   align-items: center;
   gap: var(--space-sm);
@@ -54,7 +53,6 @@ function goBack() {
   cursor: pointer;
   font-family: var(--font-family);
   font-size: 14px;
-  align-self: flex-start;
   transition: background 0.2s;
 }
 
@@ -62,56 +60,13 @@ function goBack() {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.embed-wrap {
-  flex: 1;
-  position: relative;
-  border-radius: var(--radius);
-  overflow: hidden;
+.redirect-info {
+  font-size: var(--program-desc-size);
+  color: var(--light-grey);
+  text-align: center;
 }
 
-.embed-loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120px;
-  height: 24px;
-  background:
-    linear-gradient(#1D4ED8 50%,#0000 0),
-    linear-gradient(#0000 50%,#1D4ED8 0),
-    linear-gradient(#1D4ED8 50%,#0000 0),
-    linear-gradient(#0000 50%,#1D4ED8 0),
-    linear-gradient(#1D4ED8 50%,#0000 0),
-    linear-gradient(#0000 50%,#1D4ED8 0)
-    #333;
-  background-size: calc(100%/6 + 1px) 200%;
-  background-repeat: no-repeat;
-  border-radius: 4px;
-  animation: l12 1.5s infinite;
-}
-
-@keyframes l12 {
-  0%     { background-position: calc(0*100%/5) 100%,calc(1*100%/5)   0%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
-  16.67% { background-position: calc(0*100%/5)   0%,calc(1*100%/5)   0%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
-  33.33% { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
-  50%    { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
-  66.67% { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
-  83.33% { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5)   0%,calc(5*100%/5)   0% }
-  100%   { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5)   0%,calc(5*100%/5) 100% }
-}
-
-.embed-iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: 2;
-}
-
-.embed-iframe.loaded {
-  opacity: 1;
+.redirect-info a {
+  color: var(--highlight-red);
 }
 </style>

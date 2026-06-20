@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import HeroPlayer from '../components/media/HeroPlayer.vue'
 import StreamList from '../components/media/StreamList.vue'
 import RegulaminPopup from '../components/RegulaminPopup.vue'
 import { useStreamStore } from '../stores/streamStore'
 
+const route = useRoute()
 const store = useStreamStore()
 
 const FEATURED_SLUGS = ['itvt', 'oliwier-stream', 'retro-time']
@@ -22,6 +24,12 @@ const openPrivacy = ref<number | null>(null)
 const privacyOpen = ref(true)
 const openFaq = ref<number | null>(null)
 const showRegulamin = ref(false)
+
+onMounted(() => {
+  if (route.query.regulamin === '1') {
+    showRegulamin.value = true
+  }
+})
 
 function togglePrivacy(i: number) {
   openPrivacy.value = openPrivacy.value === i ? null : i
