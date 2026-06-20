@@ -4,6 +4,8 @@ const API_URL = 'https://api.lbry.tv/api/v1/proxy'
 const CHANNEL = '@itvt:9'
 const CACHE_KEY = 'ivod_vod_cache'
 const CACHE_TTL = 12 * 60 * 60 * 1000
+const RATE_LIMIT_KEY = 'ivod_fetch_throttle'
+const RATE_LIMIT_MS = 30_000
 
 interface LbryClaim {
   name: string
@@ -76,6 +78,13 @@ function mapClaimToVodItem(claim: LbryClaim): VodItem | null {
 export async function fetchChannelVideos(): Promise<VodItem[]> {
   const cached = readCache()
   if (cached) return cached
+
+  const lastFetch = localStorage.getItem(RATE_LIMIT_KEY)
+  if (lastFetch && Date.now() - Number(lastFetch) < RATE_LIMIT_MS) {
+    console.warn('Odysee fetch throttled — too many requests')
+    return getFallback()
+  }
+  localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()))
 
   try {
     const response = await fetch(API_URL, {
