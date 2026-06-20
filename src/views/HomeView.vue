@@ -25,32 +25,44 @@ function toggleFaq(i: number) {
 
 const privacyItems = [
   {
-    title: 'O nas',
-    content: 'Jesteśmy serwisem streamingowym oferującym dostęp do kanałów iTVT Poland Group w czasie rzeczywistym.',
+    title: 'Informacje ogólne',
+    content: 'Niniejsza Polityka Prywatności określa zasady przetwarzania danych osobowych użytkowników serwisu iTVT zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 (RODO).<br/><br/><strong>Data obowiązywania:</strong> 16.01.2026',
   },
   {
-    title: 'Media',
-    content: 'Podczas odtwarzania wideo dodatkowe dane mogą być pobierane na Twoje urządzenie i wysyłane do innych serwerów.',
+    title: '1. Administrator danych',
+    content: 'Administratorem danych osobowych jest właściciel serwisu iTVT – Telewizja Internetowa.<br/>Kontakt w sprawach danych osobowych: <a href="mailto:kontakt@itvt.xyz" class="inline-link">kontakt@itvt.xyz</a>',
   },
   {
-    title: 'Cookies',
-    content: 'Przeglądarka może używać plików cookies do prawidłowego wyświetlania wideo.',
+    title: '2. Zakres przetwarzanych danych',
+    content: 'Przetwarzane mogą być: adresy IP, dane zawarte w formularzu kontaktowym (np. imię, adres e-mail), dane statystyczne i techniczne (przeglądarka, system, czas wizyty), dane zawarte w plikach cookies.<br/><br/>Podanie danych jest dobrowolne, ale może być konieczne do korzystania z wybranych funkcji serwisu.',
   },
   {
-    title: 'Osadzone treści z innych stron',
-    content: 'Elementy na stronie mogą zawierać osadzone treści (np. wideo, obrazy, artykuły). Osadzone treści z innych stron zachowują się podobnie, jakby użytkownik odwiedził tę stronę bezpośrednio. Strony te mogą zbierać informacje o Tobie, używać cookies, dołączać dodatkowe systemy śledzenia i monitorować Twoje interakcje z osadzonym materiałem.',
+    title: '3. Cele i podstawy prawne',
+    content: 'Dane przetwarzane są w celu:<br/>– świadczenia usług drogą elektroniczną – art. 6 ust. 1 lit. b RODO,<br/>– kontaktu z użytkownikiem – art. 6 ust. 1 lit. a lub b RODO,<br/>– realizacji obowiązków prawnych – art. 6 ust. 1 lit. c RODO,<br/>– analiz statystycznych i poprawy działania serwisu – art. 6 ust. 1 lit. f RODO,<br/>– zapewnienia bezpieczeństwa – art. 6 ust. 1 lit. f RODO.',
   },
   {
-    title: 'Jak długo przechowujemy Twoje dane?',
-    content: 'Jeśli zostawisz komentarz lub napiszesz wiadomość e-mail, treść i metadane będą przechowywane bezterminowo. Pozwala nam to łatwo odpowiadać na Twoje wiadomości. Jeśli użytkownik zarejestrował się na naszej stronie, przechowujemy również dane osobowe wprowadzone w profilu. Każdy użytkownik może w każdej chwili przeglądać, poprawiać lub usuwać swoje dane osobowe (z wyjątkiem nazwy użytkownika).',
+    title: '4. Odbiorcy danych',
+    content: 'Dane mogą być przekazywane podmiotom wspierającym działanie serwisu (np. hosting, serwery, dostawcy IT), wyłącznie na podstawie umów powierzenia przetwarzania danych.<br/><br/>Dane nie są przekazywane poza Unię Europejską, chyba że dostawca usług zapewnia odpowiedni stopień ochrony danych.',
   },
   {
-    title: 'Twoje prawa do danych',
-    content: 'Jeśli masz konto użytkownika lub wysłałeś wiadomość przez formularz lub e-mail, możesz poprosić o plik z wyeksportowanymi danymi osobowymi, które posiadamy. Możesz również poprosić o usunięcie wszystkich swoich danych osobowych. Nie dotyczy to danych, które jesteśmy zobowiązani przechowywać ze względów administracyjnych, prawnych lub bezpieczeństwa.',
+    title: '5. Okres przechowywania danych',
+    content: 'Dane przechowywane są:<br/>– przez czas trwania korzystania z serwisu,<br/>– do momentu cofnięcia zgody,<br/>– przez okres wymagany przepisami prawa,<br/>– do czasu przedawnienia ewentualnych roszczeń.',
   },
   {
-    title: 'Gdzie wysyłamy Twoje dane?',
-    content: 'Twoje informacje, takie jak adres IP, wersja systemu i przeglądarki, mogą być wysyłane do administratora strony w celu optymalizacji i stabilności działania serwisu.',
+    title: '6. Prawa użytkownika',
+    content: 'Użytkownik ma prawo do: dostępu do danych, ich sprostowania, usunięcia („prawo do bycia zapomnianym”), ograniczenia przetwarzania, przenoszenia danych, wniesienia sprzeciwu, cofnięcia zgody w dowolnym momencie.',
+  },
+  {
+    title: '7. Pliki cookies',
+    content: 'Serwis wykorzystuje pliki cookies w celu: prawidłowego działania strony, analizy statystyk, poprawy jakości usług.<br/><br/>Użytkownik może samodzielnie zarządzać cookies w ustawieniach przeglądarki.',
+  },
+  {
+    title: '8. Zabezpieczenia danych',
+    content: 'Administrator stosuje odpowiednie środki techniczne i organizacyjne zapewniające ochronę danych osobowych.',
+  },
+  {
+    title: '9. Zmiany polityki prywatności',
+    content: 'Polityka może być aktualizowana. Aktualna wersja jest zawsze dostępna w serwisie.',
   },
 ]
 
