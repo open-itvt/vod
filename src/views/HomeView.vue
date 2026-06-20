@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import HeroPlayer from '../components/media/HeroPlayer.vue'
 import StreamList from '../components/media/StreamList.vue'
+import RegulaminPopup from '../components/RegulaminPopup.vue'
 import { useStreamStore } from '../stores/streamStore'
 
 const store = useStreamStore()
@@ -20,6 +21,7 @@ function getThumbnail(catName: string): string {
 const openPrivacy = ref<number | null>(null)
 const privacyOpen = ref(true)
 const openFaq = ref<number | null>(null)
+const showRegulamin = ref(false)
 
 function togglePrivacy(i: number) {
   openPrivacy.value = openPrivacy.value === i ? null : i
@@ -78,6 +80,7 @@ const faqItems = [
   { q: 'Gdzie znajdę nagrania VOD?', a: 'Nagrania VOD znajdziesz w sekcji "Kategorie". Kliknij wybraną kategorię, a następnie wybierz interesujące Cię nagranie.' },
   { q: 'Jak wyszukiwać treści?', a: 'Użyj paska wyszukiwania u góry strony — wpisz frazę, a wyniki pojawią się automatycznie.' },
   { q: 'Czy mogę oglądać na telefonie?', a: 'Tak! Pobierz aplikację iTVT z: <a href="https://vod.itvt.xyz/apps" target="_blank" class="inline-link">vod.itvt.xyz/apps/</a>' },
+  { q: 'Gdzie znajdę regulamin?', a: 'Regulamin serwisu dostępny jest po kliknięciu przycisku poniżej.' },
   { q: 'Gdzie zgłosić problem?', a: 'Skontaktuj się z nami przez e-mail: <a href="mailto:kontakt@itvt.xyz" class="inline-link">kontakt@itvt.xyz</a>' },
 ]
 </script>
@@ -172,10 +175,15 @@ const faqItems = [
               width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             ><polyline points="6 9 12 15 18 9"/></svg>
           </button>
-          <div v-show="openFaq === i" class="accordion-body" v-html="item.a"></div>
+          <div v-if="item.q === 'Gdzie znajdę regulamin?'" v-show="openFaq === i" class="accordion-body">
+            <p style="margin: 0 0 var(--space-sm);">Regulamin serwisu dostępny jest pod adresem <span class="inline-link">vod.itvt.xyz/regulamin</span>.</p>
+            <button class="reg-faq-btn" @click="showRegulamin = true">Otwórz regulamin</button>
+          </div>
+          <div v-else v-show="openFaq === i" class="accordion-body" v-html="item.a"></div>
         </div>
       </div>
     </section>
+    <RegulaminPopup v-if="showRegulamin" @close="showRegulamin = false" />
   </main>
 </template>
 
@@ -461,6 +469,24 @@ main {
 
 :deep(.inline-link:hover) {
   text-decoration: underline;
+}
+
+.reg-faq-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--highlight-red);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--highlight-red);
+  font-family: var(--font-family);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reg-faq-btn:hover {
+  background: var(--highlight-red);
+  color: var(--pure-white);
 }
 
 @media (max-width: 768px) {
