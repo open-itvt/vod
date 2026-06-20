@@ -1,14 +1,19 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useStreamStore } from '../../stores/streamStore'
 import StreamCard from './StreamCard.vue'
 
 const store = useStreamStore()
+
+const visibleChannels = computed(() =>
+  store.tvChannels.filter(ch => ch.name !== 'itvt-now')
+)
 </script>
 
 <template>
-  <section v-if="store.tvChannels.length" class="grid">
+  <section v-if="visibleChannels.length" class="grid">
     <StreamCard
-      v-for="channel in store.tvChannels"
+      v-for="channel in visibleChannels"
       :key="channel.id"
       :channel="channel"
     />
