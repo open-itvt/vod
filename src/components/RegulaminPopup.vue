@@ -7,7 +7,7 @@ defineEmits<{ close: [] }>()
     <div class="reg-overlay" @click.self="$emit('close')">
       <div class="reg-card">
         <h2 class="reg-title">Regulamin serwisu iVOD</h2>
-        <p class="reg-date">Ważny od: 16.01.2026</p>
+        <p class="reg-date">Ważny od: 20.06.2026</p>
 
         <div class="reg-body">
           <p><strong>§1.</strong> Serwis iTVT jest telewizją internetową, o tematyce: technologii, newsów, muzyki, streamerów.</p>

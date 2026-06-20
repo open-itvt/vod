@@ -34,7 +34,7 @@ function toggleFaq(i: number) {
 const privacyItems = [
   {
     title: 'Informacje ogólne',
-    content: 'Niniejsza Polityka Prywatności określa zasady przetwarzania danych osobowych użytkowników serwisu iTVT zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 (RODO).<br/><br/><strong>Data obowiązywania:</strong> 16.01.2026',
+    content: 'Niniejsza Polityka Prywatności określa zasady przetwarzania danych osobowych użytkowników serwisu iTVT zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 (RODO).<br/><br/><strong>Data obowiązywania:</strong> 20.06.2026',
   },
   {
     title: '1. Administrator danych',
