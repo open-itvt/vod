@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const loaded = ref(false)
 
 function goBack() {
   router.push('/apps')
@@ -17,12 +19,15 @@ function goBack() {
       Powrót do aplikacji
     </button>
     <div class="embed-wrap">
+      <div v-if="!loaded" class="embed-loader" />
       <iframe
         src="https://hub.itvt.xyz/static/android"
         class="embed-iframe"
+        :class="{ loaded }"
         allowfullscreen
         sandbox="allow-scripts allow-same-origin allow-forms"
         referrerpolicy="no-referrer"
+        @load="loaded = true"
       />
     </div>
   </main>
@@ -64,11 +69,47 @@ function goBack() {
   overflow: hidden;
 }
 
+.embed-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 24px;
+  background:
+    linear-gradient(#1D4ED8 50%,#0000 0),
+    linear-gradient(#0000 50%,#1D4ED8 0),
+    linear-gradient(#1D4ED8 50%,#0000 0),
+    linear-gradient(#0000 50%,#1D4ED8 0),
+    linear-gradient(#1D4ED8 50%,#0000 0),
+    linear-gradient(#0000 50%,#1D4ED8 0)
+    #333;
+  background-size: calc(100%/6 + 1px) 200%;
+  background-repeat: no-repeat;
+  border-radius: 4px;
+  animation: l12 1.5s infinite;
+  z-index: 1;
+}
+
+@keyframes l12 {
+  0%     { background-position: calc(0*100%/5) 100%,calc(1*100%/5)   0%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
+  16.67% { background-position: calc(0*100%/5)   0%,calc(1*100%/5)   0%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
+  33.33% { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
+  50%    { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
+  66.67% { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5) 100%,calc(5*100%/5)   0% }
+  83.33% { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5)   0%,calc(5*100%/5)   0% }
+  100%   { background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5)   0%,calc(5*100%/5) 100% }
+}
+
 .embed-iframe {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.embed-iframe.loaded {
+  z-index: 2;
 }
 </style>
