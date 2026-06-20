@@ -63,8 +63,8 @@ const m3u8Open = ref(false)
             <a :href="p.url2" target="_blank" class="download-link alt">DMG (x64 - Intel)</a>
           </template>
           <template v-else-if="p.name === 'Android'">
-            <a :href="p.googlePlayUrl" target="_blank" class="download-link">Google Play</a>
-            <a :href="p.apkUrl" target="_blank" class="download-link alt">APK</a>
+            <a :href="p.apkUrl" target="_blank" class="download-link">APK</a>
+            <router-link to="/apps/other" class="download-link alt">Inne wersje</router-link>
           </template>
         </div>
       </div>
