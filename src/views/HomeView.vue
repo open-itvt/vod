@@ -176,7 +176,7 @@ const faqItems = [
             ><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div v-if="item.q === 'Gdzie znajdę regulamin?'" v-show="openFaq === i" class="accordion-body">
-            <p style="margin: 0 0 var(--space-sm);">Regulamin serwisu dostępny jest pod adresem <span class="inline-link">vod.itvt.xyz/regulamin</span>.</p>
+            <p style="margin: 0 0 var(--space-sm);">Regulamin serwisu dostępny jest poniżej.</p>
             <button class="reg-faq-btn" @click="showRegulamin = true">Otwórz regulamin</button>
           </div>
           <div v-else v-show="openFaq === i" class="accordion-body" v-html="item.a"></div>
