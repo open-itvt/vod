@@ -17,7 +17,13 @@ function getThumbnail(catName: string): string {
   return vod?.thumbnailUrl ?? ''
 }
 
+const openPrivacy = ref<number | null>(null)
+const privacyOpen = ref(true)
 const openFaq = ref<number | null>(null)
+
+function togglePrivacy(i: number) {
+  openPrivacy.value = openPrivacy.value === i ? null : i
+}
 
 function toggleFaq(i: number) {
   openFaq.value = openFaq.value === i ? null : i
@@ -115,19 +121,34 @@ const faqItems = [
     </section>
 
     <section id="prywatnosc" class="timeline-section">
-      <h2 class="section-heading">Prywatność</h2>
-      <div class="timeline">
+      <button class="section-heading section-heading--toggle" @click="privacyOpen = !privacyOpen">
+        <span>Prywatność</span>
+        <svg
+          class="section-arrow"
+          :class="{ open: privacyOpen }"
+          width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        ><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div v-show="privacyOpen" class="timeline">
         <div
           v-for="(item, i) in privacyItems"
           :key="i"
           class="timeline-item"
+          :class="{ expanded: openPrivacy === i }"
         >
           <div class="timeline-dot">
             <div class="timeline-dot-inner" />
           </div>
           <div class="timeline-content">
-            <h3 class="timeline-title">{{ item.title }}</h3>
-            <p class="timeline-body" v-html="item.content"></p>
+            <button class="timeline-title" @click="togglePrivacy(i)">
+              <span>{{ item.title }}</span>
+              <svg
+                class="timeline-arrow"
+                :class="{ open: openPrivacy === i }"
+                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              ><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div v-show="openPrivacy === i" class="timeline-body" v-html="item.content"></div>
           </div>
         </div>
       </div>
@@ -173,6 +194,33 @@ main {
   color: var(--light-grey);
   margin: 0;
   text-align: left;
+}
+
+.section-heading--toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.section-heading--toggle:hover {
+  color: var(--pure-white);
+}
+
+.section-arrow {
+  flex-shrink: 0;
+  color: var(--light-grey);
+  transition: transform 0.2s;
+}
+
+.section-arrow.open {
+  transform: rotate(180deg);
 }
 
 .categories-section {
@@ -306,10 +354,35 @@ main {
 }
 
 .timeline-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--space-sm);
   font-size: 16px;
   font-weight: 600;
   color: var(--pure-white);
-  margin: 0;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-family);
+  text-align: left;
+  transition: color 0.2s;
+}
+
+.timeline-title:hover {
+  color: var(--light-grey);
+}
+
+.timeline-arrow {
+  flex-shrink: 0;
+  color: var(--light-grey);
+  transition: transform 0.2s;
+}
+
+.timeline-arrow.open {
+  transform: rotate(180deg);
 }
 
 .timeline-body {
