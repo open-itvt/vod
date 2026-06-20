@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStreamStore } from '../../stores/streamStore'
 import BaseButton from '../common/BaseButton.vue'
@@ -9,6 +9,7 @@ const route = useRoute()
 const store = useStreamStore()
 const currentIndex = ref(0)
 const slideDir = ref<'left' | 'right'>('right')
+const openUnavailablePopup = inject<() => void>('openUnavailablePopup')
 
 const currentChannel = computed(() =>
   store.channels[currentIndex.value] ?? null
@@ -33,6 +34,10 @@ function switchTo(index: number) {
 }
 
 function goLive(channel: any) {
+  if (channel.name === 'itvt-now') {
+    openUnavailablePopup?.()
+    return
+  }
   router.push('/live/' + channel.name + '?ref=' + encodeURIComponent(route.fullPath))
 }
 

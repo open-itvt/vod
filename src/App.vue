@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, provide } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 import { useStreamStore } from './stores/streamStore'
 import AppHeader from './components/layout/AppHeader.vue'
@@ -7,12 +7,24 @@ import AppFooter from './components/layout/AppFooter.vue'
 import FirstLoadPopup from './components/FirstLoadPopup.vue'
 import WelcomePopup from './components/WelcomePopup.vue'
 import DeepLinkPrompt from './components/DeepLinkPrompt.vue'
+import UnavailablePopup from './components/UnavailablePopup.vue'
 import router from './router'
 
 const route = useRoute()
 const store = useStreamStore()
 const routeLoading = ref(false)
 const welcomeDone = ref(false)
+const unavailableOpen = ref(false)
+
+function openUnavailablePopup() {
+  unavailableOpen.value = true
+}
+
+function closeUnavailablePopup() {
+  unavailableOpen.value = false
+}
+
+provide('openUnavailablePopup', openUnavailablePopup)
 
 router.beforeEach(() => {
   routeLoading.value = true
@@ -34,6 +46,7 @@ function showFooter() {
 <template>
   <WelcomePopup @done="welcomeDone = true" />
   <FirstLoadPopup v-if="welcomeDone" />
+  <UnavailablePopup v-if="unavailableOpen" @close="closeUnavailablePopup" />
   <div class="route-loader" :class="{ active: routeLoading }" />
   <AppHeader />
   <RouterView />

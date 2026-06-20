@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import type { Channel } from '../../stores/streamStore'
 
@@ -8,8 +9,13 @@ defineProps<{
 
 const router = useRouter()
 const route = useRoute()
+const openUnavailablePopup = inject<() => void>('openUnavailablePopup')
 
 function goLive(channel: Channel) {
+  if (channel.name === 'itvt-now') {
+    openUnavailablePopup?.()
+    return
+  }
   router.push('/live/' + channel.name + '?ref=' + encodeURIComponent(route.fullPath))
 }
 </script>

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, inject, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
+const openUnavailablePopup = inject<() => void>('openUnavailablePopup')
 
 const name = computed(() => route.params.name as string)
 
@@ -14,13 +15,20 @@ const playerUrl = computed(() => {
 
 const backPath = computed(() => (route.query.ref as string) || '/')
 
+onMounted(() => {
+  if (name.value === 'itvt-now') {
+    openUnavailablePopup?.()
+    router.replace(backPath.value)
+  }
+})
+
 function goBack() {
   router.push(backPath.value)
 }
 </script>
 
 <template>
-  <div class="live-container">
+  <div v-if="name !== 'itvt-now'" class="live-container">
     <iframe
       v-if="playerUrl"
       :src="playerUrl"
