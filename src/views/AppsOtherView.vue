@@ -88,7 +88,6 @@ function goBack() {
   background-repeat: no-repeat;
   border-radius: 4px;
   animation: l12 1.5s infinite;
-  z-index: 1;
 }
 
 @keyframes l12 {
@@ -107,9 +106,12 @@ function goBack() {
   width: 100%;
   height: 100%;
   border: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 2;
 }
 
 .embed-iframe.loaded {
-  z-index: 2;
+  opacity: 1;
 }
 </style>
