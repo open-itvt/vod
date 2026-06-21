@@ -31,19 +31,7 @@ export default function middleware(request: Request): Response | undefined {
 
   entry.count++
 
-  const remaining = Math.max(0, MAX_REQUESTS - entry.count)
-  const resetSeconds = Math.ceil((entry.resetAt - now) / 1000)
-
-  const headers = new Headers({
-    'X-RateLimit-Limit': String(MAX_REQUESTS),
-    'X-RateLimit-Remaining': String(remaining),
-    'X-RateLimit-Reset': String(resetSeconds),
-  })
-
   if (entry.count > MAX_REQUESTS) {
-    return new Response('Too Many Requests', { status: 429, headers })
+    return new Response('Too Many Requests', { status: 429 })
   }
-
-  const response = new Response(null, { headers })
-  return response
 }
