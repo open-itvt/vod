@@ -1,6 +1,6 @@
 import type { VodItem } from '../stores/streamStore'
 
-const BASE = 'http://api.itvt.xyz'
+const BASE = 'https://api.itvt.xyz'
 
 export interface ApiVodItem {
   id: string

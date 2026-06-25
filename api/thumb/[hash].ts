@@ -9,7 +9,7 @@ export default async function handler(request: Request) {
     })
   }
 
-  const apiUrl = `http://api.itvt.xyz/api/thumb/${hash}`
+  const apiUrl = `https://api.itvt.xyz/api/thumb/${hash}`
   const api = await fetch(apiUrl)
 
   if (!api.ok) {
