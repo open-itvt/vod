@@ -58,9 +58,7 @@ function mapApiToVodItem(item: ApiVodItem): VodItem {
   const releaseDate = item.releaseTime
     ? new Date(item.releaseTime * 1000).toISOString().split('T')[0]
     : undefined
-  const thumb = item.thumbnail.startsWith('/api/thumb/')
-    ? `${BASE}${item.thumbnail}`
-    : item.thumbnail
+  const thumb = item.thumbnail
 
   return {
     id: parseInt(item.id.slice(0, 8), 16) || Math.random(),
