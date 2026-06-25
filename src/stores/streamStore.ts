@@ -61,15 +61,19 @@ function matchesRetroTime(v: VodItem): boolean {
 function mapEpgToChannel(epg: ApiEpgChannel): Channel {
   const now = new Date()
   const current = epg.epg?.find((p: { start: string; end: string }) => new Date(p.start) <= now && new Date(p.end) > now)
-  const name = slugify(epg.name)
+  const upcoming = !current ? epg.epg?.find((p: { start: string }) => new Date(p.start) > now) : undefined
+  const program = current || upcoming
+
+  let name = slugify(epg.name)
+  if (epg.name === 'Oliwier Stream') name = 'o-stream'
 
   return {
     id: epg.id.split('').reduce((acc, c) => acc * 31 + c.charCodeAt(0), 0),
     title: epg.name,
-    name: name || epg.name.toLowerCase().replace(/\s+/g, '-'),
-    programName: current?.title || epg.name,
-    timeRange: current
-      ? `${new Date(current.start).getHours().toString().padStart(2, '0')}:${new Date(current.start).getMinutes().toString().padStart(2, '0')}`
+    name,
+    programName: program?.title || epg.name,
+    timeRange: program
+      ? `${new Date(program.start).getHours().toString().padStart(2, '0')}:${new Date(program.start).getMinutes().toString().padStart(2, '0')}`
       : '00:00',
     progress: 0,
     type: 'tv',
