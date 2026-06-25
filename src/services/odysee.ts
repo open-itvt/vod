@@ -1,28 +1,34 @@
 import type { VodItem } from '../stores/streamStore'
 
-const API_URL = 'https://api.lbry.tv/api/v1/proxy'
-const CHANNEL = '@itvt:9'
-const CACHE_KEY = 'ivod_vod_cache'
-const CACHE_TTL = 12 * 60 * 60 * 1000
-const RATE_LIMIT_KEY = 'ivod_fetch_throttle'
-const RATE_LIMIT_MS = 30_000
+const BASE = 'http://api.itvt.xyz'
 
-interface LbryClaim {
+export interface ApiVodItem {
+  id: string
   name: string
-  claim_id: string
-  value: {
-    title?: string
-    description?: string
-    thumbnail?: { url: string }
-    release_time: number
-    stream_type?: string
-    source?: { media_type?: string; duration?: number }
-  }
+  title: string
+  description: string | null
+  thumbnail: string
+  duration: number
+  releaseTime: number
+  url: string
 }
 
-interface CacheData {
-  timestamp: number
-  items: VodItem[]
+export interface ApiEpgChannel {
+  id: string
+  name: string
+  category: string
+  epg: ApiEpgProgram[]
+}
+
+export interface ApiEpgProgram {
+  id: string
+  channelId: string
+  title: string
+  description: string | null
+  start: string
+  end: string
+  category: { id: string; name: string }
+  _virtual?: boolean
 }
 
 function slugify(text: string): string {
@@ -43,101 +49,35 @@ function parseProgramName(title: string): string {
   return cleaned || title
 }
 
-function mapClaimToVodItem(claim: LbryClaim): VodItem | null {
-  if (claim.value.stream_type !== 'video') return null
-
-  const title = claim.value.title || claim.name
-  const part = extractPart(title)
-  const videoName = claim.name
-  const programName = title.includes('Oliwier Stream') || videoName.startsWith('o.stream')
+function mapApiToVodItem(item: ApiVodItem): VodItem {
+  const part = extractPart(item.title)
+  const videoName = item.name
+  const programName = item.title.includes('Oliwier Stream') || videoName.startsWith('o.stream')
     ? 'Oliwier Stream'
-    : parseProgramName(title)
-  const claimId = claim.claim_id
-  const releaseDate = claim.value.release_time
-    ? new Date(claim.value.release_time * 1000).toISOString().split('T')[0]
+    : parseProgramName(item.title)
+  const releaseDate = item.releaseTime
+    ? new Date(item.releaseTime * 1000).toISOString().split('T')[0]
     : undefined
-
-  const thumbnailUrl = claim.value.thumbnail?.url ||
-    `https://thumbnails.odycdn.com/card/s:640:360/quality:85/plain/https://odysee.com/${videoName}/${claimId}`
+  const thumb = item.thumbnail.startsWith('/api/thumb/')
+    ? `${BASE}${item.thumbnail}`
+    : item.thumbnail
 
   return {
-    id: parseInt(claimId.slice(0, 8), 16) || Math.random(),
-    title,
+    id: parseInt(item.id.slice(0, 8), 16) || Math.random(),
+    title: item.title,
     programName,
     part: part || 0,
     programSlug: slugify(programName),
     videoName,
-    claimId,
-    thumbnailUrl,
+    claimId: item.id,
+    thumbnailUrl: thumb,
     date: releaseDate,
-    releaseTime: claim.value.release_time || 0,
+    releaseTime: item.releaseTime,
     views: 0,
   }
 }
 
-export async function fetchChannelVideos(): Promise<VodItem[]> {
-  const cached = readCache()
-  if (cached) return cached
-
-  const lastFetch = localStorage.getItem(RATE_LIMIT_KEY)
-  if (lastFetch && Date.now() - Number(lastFetch) < RATE_LIMIT_MS) {
-    console.warn('Odysee fetch throttled — too many requests')
-    return getFallback()
-  }
-  localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()))
-
-  try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        method: 'claim_search',
-        params: {
-          channel: CHANNEL,
-          claim_type: 'stream',
-          page_size: 50,
-          order_by: ['release_time'],
-        },
-      }),
-    })
-
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
-
-    const data = await response.json()
-    const claims: LbryClaim[] = data?.result?.items ?? []
-
-    const items = claims
-      .map(mapClaimToVodItem)
-      .filter((v): v is VodItem => v !== null)
-
-    writeCache(items)
-    return items
-  } catch (err) {
-    console.warn('Odysee API failed, using fallback:', err)
-    return getFallback()
-  }
-}
-
-function readCache(): VodItem[] | null {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY)
-    if (!raw) return null
-    const data: CacheData = JSON.parse(raw)
-    if (Date.now() - data.timestamp < CACHE_TTL) {
-      return data.items
-    }
-  } catch { /* ignore */ }
-  return null
-}
-
-function writeCache(items: VodItem[]) {
-  try {
-    const data: CacheData = { timestamp: Date.now(), items }
-    localStorage.setItem(CACHE_KEY, JSON.stringify(data))
-  } catch { /* ignore */ }
-}
-
-function getFallback(): VodItem[] {
+function getFallbackVod(): VodItem[] {
   return [
     {
       id: 101, title: 'Retro time #5 | 28.11.24', programName: 'Retro Time', part: 5, programSlug: 'retro-time',
@@ -152,4 +92,36 @@ function getFallback(): VodItem[] {
       date: '2024-11-21', releaseTime: 1732147200, views: 85,
     },
   ]
+}
+
+function getFallbackChannels() {
+  return [
+    { id: 'fallback-itvt', name: 'iTVT', category: 'importowane', epg: [] },
+    { id: 'fallback-oliwier', name: 'Oliwier Stream', category: 'importowane', epg: [] },
+    { id: 'fallback-itvt-now', name: 'iTVT Now', category: 'importowane', epg: [] },
+  ]
+}
+
+export async function fetchChannelVideos(): Promise<VodItem[]> {
+  try {
+    const res = await fetch(`${BASE}/api/vod`)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const data: { items: ApiVodItem[] } = await res.json()
+    return (data.items || []).map(mapApiToVodItem)
+  } catch (err) {
+    console.warn('VOD API failed, using fallback:', err)
+    return getFallbackVod()
+  }
+}
+
+export async function fetchEpgChannels() {
+  try {
+    const res = await fetch(`${BASE}/api/epg`)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const data: { channels: ApiEpgChannel[] } = await res.json()
+    return data.channels || []
+  } catch (err) {
+    console.warn('EPG API failed, using fallback:', err)
+    return getFallbackChannels()
+  }
 }

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { fetchChannelVideos } from '../services/odysee'
+import { fetchChannelVideos, fetchEpgChannels, type ApiEpgChannel } from '../services/odysee'
 
 export type ContentType = 'tv' | 'vod'
 
@@ -58,16 +58,30 @@ function matchesRetroTime(v: VodItem): boolean {
   return t.includes('retro time') || v.videoName.includes('retrotime')
 }
 
-export const useStreamStore = defineStore('stream', () => {
-  const channels = ref<Channel[]>([
-    { id: 1, title: 'iTVT', name: 'itvt', programName: 'Klubuntu Stream - Tworzymy razem', timeRange: '18:00', progress: 15, type: 'tv' },
-    { id: 2, title: 'Oliwier Stream', name: 'o-stream', programName: 'Wieczorny Stream', timeRange: '21:00', progress: 70, type: 'tv' },
-    { id: 3, title: 'iTVT Now', name: 'itvt-now', programName: 'Reklamy', timeRange: '22:00', progress: 30, type: 'tv' },
-  ])
+function mapEpgToChannel(epg: ApiEpgChannel): Channel {
+  const now = new Date()
+  const current = epg.epg?.find((p: { start: string; end: string }) => new Date(p.start) <= now && new Date(p.end) > now)
+  const name = slugify(epg.name)
 
+  return {
+    id: epg.id.split('').reduce((acc, c) => acc * 31 + c.charCodeAt(0), 0),
+    title: epg.name,
+    name: name || epg.name.toLowerCase().replace(/\s+/g, '-'),
+    programName: current?.title || epg.name,
+    timeRange: current
+      ? `${new Date(current.start).getHours().toString().padStart(2, '0')}:${new Date(current.start).getMinutes().toString().padStart(2, '0')}`
+      : '00:00',
+    progress: 0,
+    type: 'tv',
+  }
+}
+
+export const useStreamStore = defineStore('stream', () => {
+  const channels = ref<Channel[]>([])
   const vodItems = ref<VodItem[]>([])
   const vodLoading = ref(false)
   const vodError = ref<string | null>(null)
+  const epgLoading = ref(false)
 
   const searchQuery = ref('')
 
@@ -124,6 +138,18 @@ export const useStreamStore = defineStore('stream', () => {
     }
   }
 
+  async function loadEpg() {
+    epgLoading.value = true
+    try {
+      const epg = await fetchEpgChannels()
+      channels.value = epg.map(mapEpgToChannel)
+    } catch {
+      // fallback — keep existing channels
+    } finally {
+      epgLoading.value = false
+    }
+  }
+
   function setChannels(list: Channel[]) {
     channels.value = list
   }
@@ -133,6 +159,7 @@ export const useStreamStore = defineStore('stream', () => {
     vodItems,
     vodLoading,
     vodError,
+    epgLoading,
     searchQuery,
     searchResults,
     allSearchable,
@@ -141,5 +168,6 @@ export const useStreamStore = defineStore('stream', () => {
     itemsByCategory,
     setChannels,
     loadVodItems,
+    loadEpg,
   }
 })

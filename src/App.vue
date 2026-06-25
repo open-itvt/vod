@@ -36,6 +36,7 @@ router.afterEach(() => {
 
 onMounted(() => {
   store.loadVodItems()
+  store.loadEpg()
 })
 
 function showFooter() {
