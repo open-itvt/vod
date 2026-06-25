@@ -60,6 +60,7 @@ function matchesRetroTime(v: VodItem): boolean {
 
 function mapEpgToChannel(epg: ApiEpgChannel): Channel {
   const now = new Date()
+  const todayStr = `${now.getDate()}.${(now.getMonth() + 1).toString().padStart(2, '0')}`
   const current = epg.epg?.find((p: { start: string; end: string }) => new Date(p.start) <= now && new Date(p.end) > now)
   const upcoming = !current ? epg.epg?.find((p: { start: string }) => new Date(p.start) > now) : undefined
   const program = current || upcoming
@@ -67,14 +68,26 @@ function mapEpgToChannel(epg: ApiEpgChannel): Channel {
   let name = slugify(epg.name)
   if (epg.name === 'Oliwier Stream') name = 'o-stream'
 
+  let programName = program?.title || epg.name
+  let timeRange = '00:00'
+
+  if (program) {
+    const pStart = new Date(program.start)
+    const pDay = `${pStart.getDate()}.${(pStart.getMonth() + 1).toString().padStart(2, '0')}`
+    const hours = pStart.getHours().toString().padStart(2, '0')
+    const mins = pStart.getMinutes().toString().padStart(2, '0')
+    timeRange = `${hours}:${mins}`
+    if (pDay !== todayStr) {
+      programName += ` (${pDay})`
+    }
+  }
+
   return {
     id: epg.id.split('').reduce((acc, c) => acc * 31 + c.charCodeAt(0), 0),
     title: epg.name,
     name,
-    programName: program?.title || epg.name,
-    timeRange: program
-      ? `${new Date(program.start).getHours().toString().padStart(2, '0')}:${new Date(program.start).getMinutes().toString().padStart(2, '0')}`
-      : '00:00',
+    programName,
+    timeRange,
     progress: 0,
     type: 'tv',
   }
