@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, provide } from 'vue'
+import { ref, onMounted, onUnmounted, provide } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 import { useStreamStore } from './stores/streamStore'
 import AppHeader from './components/layout/AppHeader.vue'
@@ -37,6 +37,10 @@ router.afterEach(() => {
 onMounted(() => {
   store.loadVodItems()
   store.loadEpg()
+})
+
+onUnmounted(() => {
+  store.cleanup()
 })
 
 function showFooter() {

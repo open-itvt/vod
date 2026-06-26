@@ -12,6 +12,8 @@ export interface Channel {
   timeRange: string
   progress: number
   type: ContentType
+  programStart?: number
+  programEnd?: number
 }
 
 export interface VodItem {
@@ -58,12 +60,23 @@ function matchesRetroTime(v: VodItem): boolean {
   return t.includes('retro time') || v.videoName.includes('retrotime')
 }
 
-function mapEpgToChannel(epg: ApiEpgChannel): Channel {
-  const now = new Date()
+function mapEpgToChannel(epg: ApiEpgChannel, now: Date = new Date()): Channel {
   const todayStr = `${now.getDate()}.${(now.getMonth() + 1).toString().padStart(2, '0')}`
   const current = epg.epg?.find((p: { start: string; end: string }) => new Date(p.start) <= now && new Date(p.end) > now)
   const upcoming = !current ? epg.epg?.find((p: { start: string }) => new Date(p.start) > now) : undefined
   const program = current || upcoming
+  let progress = 0
+  let programStart: number | undefined
+  let programEnd: number | undefined
+
+  if (current) {
+    programStart = new Date(current.start).getTime()
+    programEnd = new Date(current.end).getTime()
+    const duration = programEnd - programStart
+    if (duration > 0) {
+      progress = Math.min(100, Math.max(0, ((now.getTime() - programStart) / duration) * 100))
+    }
+  }
 
   let name = slugify(epg.name)
   if (epg.name === 'Oliwier Stream') name = 'o-stream'
@@ -88,19 +101,24 @@ function mapEpgToChannel(epg: ApiEpgChannel): Channel {
     name,
     programName,
     timeRange,
-    progress: 0,
+    progress,
     type: 'tv',
+    programStart,
+    programEnd,
   }
 }
 
 export const useStreamStore = defineStore('stream', () => {
   const channels = ref<Channel[]>([])
+  const rawEpg = ref<ApiEpgChannel[]>([])
   const vodItems = ref<VodItem[]>([])
   const vodLoading = ref(false)
   const vodError = ref<string | null>(null)
   const epgLoading = ref(false)
 
   const searchQuery = ref('')
+
+  let progressTimer: ReturnType<typeof setInterval> | null = null
 
   const tvChannels = computed(() =>
     channels.value.filter(ch => ch.type === 'tv')
@@ -159,11 +177,29 @@ export const useStreamStore = defineStore('stream', () => {
     epgLoading.value = true
     try {
       const epg = await fetchEpgChannels()
-      channels.value = epg.map(mapEpgToChannel)
+      rawEpg.value = epg
+      channels.value = epg.map(c => mapEpgToChannel(c))
+      startProgressTimer()
     } catch {
       // fallback — keep existing channels
     } finally {
       epgLoading.value = false
+    }
+  }
+
+  function startProgressTimer() {
+    if (progressTimer) return
+    progressTimer = setInterval(() => {
+      if (rawEpg.value.length) {
+        channels.value = rawEpg.value.map(c => mapEpgToChannel(c))
+      }
+    }, 30000)
+  }
+
+  function cleanup() {
+    if (progressTimer) {
+      clearInterval(progressTimer)
+      progressTimer = null
     }
   }
 
@@ -173,6 +209,7 @@ export const useStreamStore = defineStore('stream', () => {
 
   return {
     channels,
+    rawEpg,
     vodItems,
     vodLoading,
     vodError,
@@ -186,5 +223,6 @@ export const useStreamStore = defineStore('stream', () => {
     setChannels,
     loadVodItems,
     loadEpg,
+    cleanup,
   }
 })
