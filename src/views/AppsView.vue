@@ -43,7 +43,6 @@ const platforms = [
   {
     name: 'Android',
     version: 'v3.3.0',
-    googlePlayUrl: 'https://play.google.com/store/apps/details?id=itvt.ivod',
     apks: [
       { label: 'APK (arm64)', url: 'https://github.com/open-itvt/mobile-app/releases/download/v3.3.0/iTVT-3.3.0-mobile-arm64-v8a-release.apk' },
       { label: 'APK (armeabi v7a)', url: 'https://github.com/open-itvt/mobile-app/releases/download/v3.3.0/iTVT-3.3.0-mobile-armeabi-v7a-release.apk' },
@@ -56,6 +55,8 @@ const platforms = [
     version: 'v3.3.0',
     apks: [
       { label: 'APK (arm64)', url: 'https://github.com/open-itvt/mobile-app/releases/download/v3.3.0/iTVT-3.3.0-tv-arm64-v8a-release.apk' },
+      { label: 'APK (armeabi v7a)', url: 'https://github.com/open-itvt/mobile-app/releases/download/v3.3.0/iTVT-3.3.0-tv-armeabi-v7a-release.apk' },
+      { label: 'APK (x86_64)', url: 'https://github.com/open-itvt/mobile-app/releases/download/v3.3.0/iTVT-3.3.0-tv-x86_64-release.apk' },
     ],
     icon: '<svg width="48" height="48" viewBox="0 0 24 24" fill="var(--pure-white)"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M8.5 2l3.5 3 3.5-3"/><path d="M12 10v4"/><path d="M10 12h4"/></svg>',
   },
@@ -127,7 +128,7 @@ const m3u8Open = ref(false)
           </template>
           <template v-else-if="p.apks">
             <a v-for="(a, i) in p.apks" :key="i" :href="a.url" target="_blank" class="download-link" :class="{ alt: i > 0 }">{{ a.label }}</a>
-            <a v-if="p.name === 'Android'" :href="p.googlePlayUrl" target="_blank" class="download-link alt">Google Play</a>
+            <router-link v-if="p.name === 'Android'" to="/apps/other" class="download-link alt">Inne wersje</router-link>
           </template>
         </div>
       </div>
