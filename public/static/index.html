@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>iVOD — Pobierz aplikację</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #0F0F11;
+      color: #FFFFFF;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: #161416;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 40px 32px;
+      max-width: 480px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      text-align: center;
+    }
+    .logo { font-size: 24px; font-weight: 700; color: #FFFFFF; letter-spacing: 2px; }
+    .title { font-size: 20px; font-weight: 700; margin: 0; }
+    .sub { font-size: 14px; color: #BCBCC4; margin: 0; line-height: 1.6; }
+    .apps { display: flex; flex-direction: column; gap: 24px; width: 100%; }
+    .app-box { display: flex; flex-direction: column; gap: 8px; }
+    .app-name { font-size: 16px; font-weight: 700; margin: 0 0 4px; color: #FFFFFF; }
+    .dl-link {
+      display: block;
+      padding: 10px 16px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.04);
+      color: #BCBCC4;
+      text-decoration: none;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .dl-link:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; }
+    .dl-link.google { color: #A81414; font-weight: 600; }
+    .dl-link.google:hover { background: rgba(168,20,20,0.15); }
+    .footer { font-size: 11px; color: #555555; margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">iVOD</div>
+    <h1 class="title">Pobierz aplikację</h1>
+    <p class="sub">Wybierz wersję dla swojego urządzenia</p>
+
+    <div class="apps">
+      <div class="app-box">
+        <h2 class="app-name">Android</h2>
+        <a class="dl-link" href="https://github.com/open-itvt/mobile-app/releases/download/v3.3.0/iTVT-3.3.0-mobile-arm64-v8a-release.apk">APK (arm64)</a>
+        <a class="dl-link" href="https://github.com/open-itvt/mobile-app/releases/download/v3.3.0/iTVT-3.3.0-mobile-armeabi-v7a-release.apk">APK (armeabi v7a)</a>
+        <a class="dl-link" href="https://github.com/open-itvt/mobile-app/releases/download/v3.3.0/iTVT-3.3.0-mobile-x86_64-release.apk">APK (x86_64)</a>
+        <a class="dl-link google" href="https://play.google.com/store/apps/details?id=itvt.ivod">Google Play</a>
+      </div>
+
+      <div class="app-box">
+        <h2 class="app-name">Android TV</h2>
+        <a class="dl-link" href="https://github.com/open-itvt/mobile-app/releases/download/v3.3.0/iTVT-3.3.0-tv-arm64-v8a-release.apk">APK (arm64)</a>
+        <a class="dl-link" href="https://github.com/open-itvt/mobile-app/releases/download/v3.3.0/iTVT-3.3.0-tv-armeabi-v7a-release.apk">APK (armeabi v7a)</a>
+        <a class="dl-link" href="https://github.com/open-itvt/mobile-app/releases/download/v3.3.0/iTVT-3.3.0-tv-x86_64-release.apk">APK (x86_64)</a>
+      </div>
+    </div>
+
+    <p class="footer">© iTVT Poland Group 2026</p>
+  </div>
+</body>
+</html>

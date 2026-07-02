@@ -1,6 +1,8 @@
 {
   "rewrites": [
     { "source": "/api/thumb/([a-f0-9]+)", "destination": "/api/thumb/[hash]" },
+    { "source": "/static", "destination": "/static/index.html" },
+    { "source": "/static/(.*)", "destination": "/static/$1" },
     { "source": "/assets/(.*)", "destination": "/assets/$1" },
     { "source": "/(.*)\\.(js|css|ico|png|jpg|svg|woff2?|ttf|map)", "destination": "/$1.$2" },
     { "source": "/favicon.ico", "destination": "/favicon.ico" },
