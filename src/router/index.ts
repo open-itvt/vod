@@ -5,7 +5,6 @@ import SearchView from '../views/SearchView.vue'
 import VodView from '../views/VodView.vue'
 import CategoryView from '../views/CategoryView.vue'
 import AppsView from '../views/AppsView.vue'
-import AppsOtherView from '../views/AppsOtherView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -16,7 +15,7 @@ const router = createRouter({
     { path: '/vod/:programName/:part', name: 'vod', component: VodView },
     { path: '/category/:slug', name: 'category', component: CategoryView },
     { path: '/apps', name: 'apps', component: AppsView },
-    { path: '/apps/other', name: 'apps-other', component: AppsOtherView },
+    { path: '/apps/other', redirect: 'https://hub.itvt.xyz/static/android' },
     { path: '/regulamin', redirect: '/?regulamin=1' },
   ],
   scrollBehavior(to) {
