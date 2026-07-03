@@ -31,4 +31,5 @@ dist-ssr
 
 # Migration info
 public/migrate_info.html
+public/og-image.svg
 PopupMigrate.jsx
