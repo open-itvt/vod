@@ -1,4 +1,12 @@
 {
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "mobile.itvt.xyz" }],
+      "destination": "https://vod.itvt.xyz/static",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     { "source": "/api/thumb/([a-f0-9]+)", "destination": "/api/thumb/[hash]" },
     { "source": "/static", "destination": "/static/index.html" },
