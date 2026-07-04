@@ -23,7 +23,7 @@ function goLive(channel: Channel) {
 <template>
   <article class="card" @click="goLive(channel)">
     <h3 class="card-title">{{ channel.title }}</h3>
-    <div class="progress-bar">
+    <div v-if="channel.progress > 0" class="progress-bar">
       <div class="progress-fill" :style="{ width: channel.progress + '%' }" />
     </div>
     <p class="card-meta">{{ channel.timeRange }} — {{ channel.programName }}</p>
